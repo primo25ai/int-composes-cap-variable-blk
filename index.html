@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intérêts Composés</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f5f2ec;
+        --surface: #ffffff;
+        --surface2: #ede9e1;
+        --ink: #1a1814;
+        --ink2: #6b6760;
+        --ink3: #a8a49e;
+        --accent: #1a4d3e;
+        --accent-light: #d6eae4;
+        --accent2: #c4622d;
+        --accent3: #185fa5;
+        --border: rgba(26, 24, 20, 0.1);
+        --font-display: "DM Serif Display", Georgia, serif;
+        --font-body: "Instrument Sans", sans-serif;
+        --font-mono: "DM Mono", monospace;
+        --radius: 12px;
+        --shadow: 0 2px 12px rgba(26, 24, 20, 0.07);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #151310;
+          --surface: #1f1d19;
+          --surface2: #2a2722;
+          --ink: #f0ede6;
+          --ink2: #9a9790;
+          --ink3: #5a5752;
+          --accent: #4caf85;
+          --accent-light: #0f2e23;
+          --accent2: #e07b4a;
+          --accent3: #5b9bd5;
+          --border: rgba(240, 237, 230, 0.08);
+          --shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+        }
+      }
+
+      html {
+        font-size: 16px;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        padding: 2rem 1rem 4rem;
+      }
+
+      .wrapper {
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .eyebrow {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.75rem;
+      }
+
+      h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 6vw, 3.2rem);
+        font-weight: 400;
+        line-height: 1.1;
+        color: var(--ink);
+        margin-bottom: 0.75rem;
+      }
+
+      h1 em {
+        font-style: italic;
+        color: var(--accent);
+      }
+
+      .subtitle {
+        font-size: 15px;
+        color: var(--ink2);
+        line-height: 1.6;
+        max-width: 520px;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 640px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      .panel-body {
+        padding: 1.5rem;
+      }
+
+      .panel-title {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink3);
+        margin-bottom: 1.25rem;
+      }
+
+      .metrics {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+
+      @media (max-width: 600px) {
+        .metrics {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 360px) {
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .metric {
+        background: var(--surface);
+        padding: 1.25rem;
+      }
+
+      .metric-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink3);
+        margin-bottom: 0.4rem;
+      }
+
+      .metric-value {
+        font-family: var(--font-display);
+        font-size: clamp(1rem, 2.4vw, 1.65rem);
+        color: var(--ink);
+        line-height: 1;
+        word-break: break-all;
+      }
+
+      .metric-value.positive {
+        color: var(--accent);
+      }
+      .metric-value.highlight {
+        color: var(--accent2);
+      }
+      .metric-value.blue {
+        color: var(--accent3);
+      }
+
+      .field {
+        margin-bottom: 1.4rem;
+      }
+      .field:last-child {
+        margin-bottom: 0;
+      }
+
+      .field-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.55rem;
+      }
+
+      .field-label {
+        font-size: 13px;
+        color: var(--ink2);
+      }
+
+      .field-value {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink);
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        background: var(--surface2);
+        border-radius: 2px;
+        outline: none;
+        cursor: pointer;
+        accent-color: var(--accent);
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 3px solid var(--surface);
+        box-shadow: 0 0 0 1px var(--accent);
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 3px solid var(--surface);
+        box-shadow: 0 0 0 1px var(--accent);
+        cursor: pointer;
+      }
+
+      .toggle-group {
+        display: flex;
+        background: var(--surface2);
+        border-radius: 8px;
+        padding: 3px;
+        gap: 3px;
+      }
+
+      .toggle-btn {
+        flex: 1;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.03em;
+        padding: 6px 4px;
+        border-radius: 6px;
+        border: none;
+        background: transparent;
+        color: var(--ink2);
+        cursor: pointer;
+        transition: all 0.15s;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      .toggle-btn.active {
+        background: var(--surface);
+        color: var(--accent);
+        font-weight: 500;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .deposit-panel {
+        margin-top: 1.25rem;
+        padding: 1rem;
+        background: var(--accent-light);
+        border-radius: 8px;
+        border: 1px solid rgba(26, 77, 62, 0.12);
+        display: none;
+      }
+
+      .deposit-panel.visible {
+        display: block;
+      }
+      .deposit-panel .field {
+        margin-bottom: 1rem;
+      }
+      .deposit-panel .field:last-child {
+        margin-bottom: 0;
+      }
+
+      .currency-selector {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .currency-btn {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--ink2);
+        cursor: pointer;
+        transition: all 0.15s;
+        letter-spacing: 0.04em;
+      }
+
+      .currency-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .currency-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--surface);
+      }
+
+      .chart-panel {
+        grid-column: 1 / -1;
+      }
+      .chart-wrap {
+        position: relative;
+        width: 100%;
+        height: 280px;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--ink2);
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .formula-panel {
+        grid-column: 1 / -1;
+        background: var(--accent-light);
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      .formula-inner {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .formula-eq {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--accent);
+        font-weight: 500;
+        white-space: nowrap;
+        padding-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .formula-desc {
+        font-size: 13px;
+        color: var(--ink2);
+        line-height: 1.6;
+      }
+      .formula-values {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink3);
+        margin-top: 0.4rem;
+      }
+
+      .compare-panel {
+        grid-column: 1 / -1;
+      }
+
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      .compare-table th {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink3);
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
+      }
+
+      .compare-table td {
+        padding: 0.6rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--ink2);
+      }
+
+      .compare-table tr:last-child td {
+        border-bottom: none;
+      }
+      .compare-table td:first-child {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .deposit-col {
+        color: var(--accent3) !important;
+        font-family: var(--font-mono);
+      }
+      .interest-col {
+        color: var(--accent) !important;
+        font-family: var(--font-mono);
+      }
+      .total-col {
+        color: var(--accent2) !important;
+        font-family: var(--font-mono);
+        font-weight: 500 !important;
+      }
+
+      footer {
+        margin-top: 3rem;
+        text-align: center;
+        font-size: 12px;
+        color: var(--ink3);
+        font-family: var(--font-mono);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <p class="eyebrow">Calculateur financier</p>
+        <h1>Intérêts <em>composés</em></h1>
+        <p class="subtitle">
+          Visualisez la puissance de la croissance exponentielle — avec ou sans
+          versements réguliers. Les intérêts génèrent des intérêts, et le temps
+          fait le reste.
+        </p>
+      </header>
+
+      <div class="layout">
+        <!-- METRICS -->
+        <div class="metrics">
+          <div class="metric">
+            <p class="metric-label">Capital final</p>
+            <p class="metric-value highlight" id="m-final">—</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">Capital versé</p>
+            <p class="metric-value blue" id="m-invested">—</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">Intérêts gagnés</p>
+            <p class="metric-value positive" id="m-gains">—</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">Multiplicateur</p>
+            <p class="metric-value" id="m-mult">—</p>
+          </div>
+        </div>
+
+        <!-- BASE PARAMS -->
+        <div class="panel">
+          <div class="panel-body">
+            <p class="panel-title">Paramètres de base</p>
+
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label">Capital initial</label>
+                <span class="field-value" id="v-principal">1 000 €</span>
+              </div>
+              <input
+                type="range"
+                id="principal"
+                min="0"
+                max="100000"
+                step="100"
+                value="1000"
+              />
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label">Taux annuel</label>
+                <span class="field-value" id="v-rate">7 %</span>
+              </div>
+              <input
+                type="range"
+                id="rate"
+                min="1"
+                max="25"
+                step="1"
+                value="7"
+              />
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label">Durée</label>
+                <span class="field-value" id="v-years">20 ans</span>
+              </div>
+              <input
+                type="range"
+                id="years"
+                min="1"
+                max="50"
+                step="1"
+                value="20"
+              />
+            </div>
+
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label">Devise</label>
+              </div>
+              <div class="currency-selector">
+                <button class="currency-btn active" data-currency="EUR">
+                  € Euro
+                </button>
+                <button class="currency-btn" data-currency="USD">
+                  $ Dollar
+                </button>
+                <button class="currency-btn" data-currency="XPF">
+                  XPF Pacifique
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DEPOSITS -->
+        <div class="panel">
+          <div class="panel-body">
+            <p class="panel-title">Versements récurrents</p>
+
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label">Fréquence</label>
+              </div>
+              <div class="toggle-group">
+                <button class="toggle-btn active" data-freq="0">Aucun</button>
+                <button class="toggle-btn" data-freq="12">Mensuel</button>
+                <button class="toggle-btn" data-freq="4">Trimestriel</button>
+                <button class="toggle-btn" data-freq="1">Annuel</button>
+              </div>
+            </div>
+
+            <div class="deposit-panel" id="deposit-panel">
+              <div class="field">
+                <div class="field-header">
+                  <label class="field-label" id="deposit-label"
+                    >Montant mensuel</label
+                  >
+                  <span class="field-value" id="v-deposit">100 €</span>
+                </div>
+                <input
+                  type="range"
+                  id="deposit"
+                  min="0"
+                  max="5000"
+                  step="10"
+                  value="100"
+                />
+              </div>
+
+              <div class="field">
+                <div class="field-header">
+                  <label class="field-label">Moment du versement</label>
+                </div>
+                <div class="toggle-group">
+                  <button class="toggle-btn active" data-timing="end">
+                    Fin de période
+                  </button>
+                  <button class="toggle-btn" data-timing="start">
+                    Début de période
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FORMULA -->
+        <div class="panel formula-panel">
+          <div class="panel-body">
+            <p class="panel-title">Formule utilisée</p>
+            <div class="formula-inner">
+              <span class="formula-eq" id="formula-eq">A = P×(1+r)ⁿ</span>
+              <div>
+                <p class="formula-desc" id="formula-desc">
+                  P = capital · r = taux annuel · n = années
+                </p>
+                <p class="formula-values" id="formula-vals">—</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART -->
+        <div class="panel chart-panel">
+          <div class="panel-body">
+            <p class="panel-title">Évolution dans le temps</p>
+            <div class="legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background: #c4622d"></div>
+                Capital initial
+              </div>
+              <div class="legend-item" id="leg-deposit" style="display: none">
+                <div class="legend-dot" style="background: #185fa5"></div>
+                Versements cumulés
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background: #1a4d3e"></div>
+                Intérêts
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="panel compare-panel">
+          <div class="panel-body">
+            <p class="panel-title">Détail annuel</p>
+            <div style="overflow-x: auto">
+              <table class="compare-table">
+                <thead id="table-head">
+                  <tr>
+                    <th>Année</th>
+                    <th id="th-invested">Capital versé</th>
+                    <th>Intérêts cumulés</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>© Calculateur · Intérêts composés · Outil éducatif</footer>
+    </div>
+
+    <script>
+      let chart = null;
+
+      const CURRENCIES = {
+        EUR: { symbol: "€", locale: "fr-FR", position: "after" },
+        USD: { symbol: "$", locale: "en-US", position: "before" },
+        XPF: { symbol: "XPF", locale: "fr-FR", position: "after" },
+      };
+
+      let currentCurrency = "EUR";
+      let currentFreq = 0;
+      let currentTiming = "end";
+
+      function fmt(n) {
+        const c = CURRENCIES[currentCurrency];
+        const num = Math.round(n).toLocaleString(c.locale);
+        return c.position === "before"
+          ? c.symbol + num
+          : num + "\u202f" + c.symbol;
+      }
+
+      function fmtShort(v) {
+        const c = CURRENCIES[currentCurrency];
+        const pre = c.position === "before" ? c.symbol : "";
+        const post = c.position === "after" ? "\u202f" + c.symbol : "";
+        if (v >= 1000000) return pre + (v / 1000000).toFixed(1) + "M" + post;
+        if (v >= 1000) return pre + Math.round(v / 1000) + "k" + post;
+        return pre + Math.round(v) + post;
+      }
+
+      function calcSnapshots(P, r, n, deposit, freq, timing) {
+        const snapshots = [];
+        let balance = P;
+        const rPeriod = freq > 0 ? r / freq : r;
+
+        for (let y = 1; y <= n; y++) {
+          if (freq === 0) {
+            balance = balance * (1 + r);
+          } else {
+            for (let p = 0; p < freq; p++) {
+              if (timing === "start") balance += deposit;
+              balance = balance * (1 + rPeriod);
+              if (timing === "end") balance += deposit;
+            }
+          }
+          const totalDeposited = freq > 0 ? deposit * freq * y : 0;
+          const totalInvested = P + totalDeposited;
+          snapshots.push({
+            year: y,
+            principal: P,
+            deposited: totalDeposited,
+            invested: totalInvested,
+            interest: Math.max(0, balance - totalInvested),
+            total: balance,
+          });
+        }
+        return snapshots;
+      }
+
+      function computeAndRender() {
+        const P = parseInt(document.getElementById("principal").value);
+        const r = parseInt(document.getElementById("rate").value) / 100;
+        const n = parseInt(document.getElementById("years").value);
+        const deposit =
+          currentFreq > 0
+            ? parseInt(document.getElementById("deposit").value)
+            : 0;
+
+        document.getElementById("v-principal").textContent = fmt(P);
+        document.getElementById("v-rate").textContent =
+          (r * 100).toFixed(0) + " %";
+        document.getElementById("v-years").textContent =
+          n + " an" + (n > 1 ? "s" : "");
+        if (currentFreq > 0)
+          document.getElementById("v-deposit").textContent = fmt(deposit);
+
+        const snaps = calcSnapshots(
+          P,
+          r,
+          n,
+          deposit,
+          currentFreq,
+          currentTiming,
+        );
+        const last = snaps[snaps.length - 1];
+
+        document.getElementById("m-final").textContent = fmt(last.total);
+        document.getElementById("m-invested").textContent = fmt(last.invested);
+        document.getElementById("m-gains").textContent =
+          "+" + fmt(last.interest);
+        document.getElementById("m-mult").textContent =
+          "\u00d7" +
+          (last.invested > 0 ? (last.total / last.invested).toFixed(2) : "—");
+
+        // Formula
+        if (currentFreq === 0) {
+          document.getElementById("formula-eq").textContent =
+            "A = P \u00d7 (1 + r)\u207f";
+          document.getElementById("formula-desc").textContent =
+            "P = capital initial \u00b7 r = taux annuel \u00b7 n = ann\u00e9es";
+          document.getElementById("formula-vals").textContent =
+            fmt(P) +
+            " \u00d7 (1 + " +
+            (r * 100).toFixed(0) +
+            "%)^" +
+            n +
+            " = " +
+            fmt(last.total);
+        } else {
+          const fl = { 12: "mois", 4: "trimestres", 1: "ans" }[currentFreq];
+          document.getElementById("formula-eq").textContent =
+            "FV = P\u00d7(1+r/m)^(mn) + d\u00d7[((1+r/m)^(mn)\u22121)\u00f7(r/m)]";
+          document.getElementById("formula-desc").textContent =
+            "P = capital initial \u00b7 d = versement \u00b7 m = p\u00e9riodes/an (" +
+            currentFreq +
+            ") \u00b7 n = ann\u00e9es";
+          document.getElementById("formula-vals").textContent =
+            "Capital: " +
+            fmt(P) +
+            " \u00b7 Versement: " +
+            fmt(deposit) +
+            "/" +
+            fl +
+            " \u00b7 R\u00e9sultat: " +
+            fmt(last.total);
+        }
+
+        // Legend
+        document.getElementById("leg-deposit").style.display =
+          currentFreq > 0 ? "flex" : "none";
+
+        // Table header
+        document.getElementById("th-invested").textContent =
+          currentFreq > 0 ? "Capital versé" : "Capital initial";
+
+        // Chart data
+        const isDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        const gridColor = isDark
+          ? "rgba(255,255,255,0.06)"
+          : "rgba(0,0,0,0.06)";
+        const tickColor = isDark ? "#5A5752" : "#A8A49E";
+
+        const step = n > 30 ? 2 : 1;
+        const pts = [
+          {
+            year: 0,
+            principal: P,
+            deposited: 0,
+            invested: P,
+            interest: 0,
+            total: P,
+          },
+          ...snaps.filter((s) => s.year % step === 0 || s.year === n),
+        ];
+
+        const labels = pts.map((s) =>
+          s.year === 0 ? "D\u00e9part" : "An\u00a0" + s.year,
+        );
+        const dPrinc = pts.map((s) => s.principal);
+        const dDeposits = pts.map((s) => s.deposited);
+        const dInterest = pts.map((s) => s.interest);
+
+        const datasets = [
+          {
+            label: "Capital initial",
+            data: dPrinc,
+            backgroundColor: isDark
+              ? "rgba(224,123,74,0.85)"
+              : "rgba(196,98,45,0.85)",
+            borderColor: "transparent",
+            stack: "stack",
+          },
+          ...(currentFreq > 0
+            ? [
+                {
+                  label: "Versements cumulés",
+                  data: dDeposits,
+                  backgroundColor: isDark
+                    ? "rgba(91,155,213,0.8)"
+                    : "rgba(24,95,165,0.75)",
+                  borderColor: "transparent",
+                  stack: "stack",
+                },
+              ]
+            : []),
+          {
+            label: "Intérêts",
+            data: dInterest,
+            backgroundColor: isDark
+              ? "rgba(76,175,133,0.85)"
+              : "rgba(26,77,62,0.85)",
+            borderColor: "transparent",
+            stack: "stack",
+          },
+        ];
+
+        const tooltipLabel = (ctx) =>
+          " " + ctx.dataset.label + "\u00a0: " + fmt(Math.round(ctx.parsed.y));
+        const tooltipFooter = (items) =>
+          "Total\u00a0: " +
+          fmt(Math.round(items.reduce((s, i) => s + i.parsed.y, 0)));
+
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+
+        chart = new Chart(document.getElementById("chart"), {
+          type: "bar",
+          data: { labels, datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: isDark ? "#1F1D19" : "#fff",
+                borderColor: isDark
+                  ? "rgba(255,255,255,0.08)"
+                  : "rgba(0,0,0,0.1)",
+                borderWidth: 1,
+                titleColor: isDark ? "#F0EDE6" : "#1A1814",
+                bodyColor: isDark ? "#9A9790" : "#6B6760",
+                footerColor: isDark ? "#F0EDE6" : "#1A1814",
+                footerFont: { weight: "500" },
+                padding: 10,
+                callbacks: { label: tooltipLabel, footer: tooltipFooter },
+              },
+            },
+            scales: {
+              x: {
+                stacked: true,
+                ticks: {
+                  color: tickColor,
+                  font: { size: 11, family: "'DM Mono', monospace" },
+                  autoSkip: true,
+                  maxTicksLimit: 10,
+                },
+                grid: { display: false },
+              },
+              y: {
+                stacked: true,
+                ticks: {
+                  color: tickColor,
+                  font: { size: 11, family: "'DM Mono', monospace" },
+                  callback: fmtShort,
+                },
+                grid: { color: gridColor },
+              },
+            },
+          },
+        });
+
+        // Table
+        const checkpoints =
+          n <= 10
+            ? Array.from({ length: n }, (_, i) => i + 1)
+            : [
+                1,
+                2,
+                3,
+                5,
+                Math.round(n / 4),
+                Math.round(n / 2),
+                Math.round((3 * n) / 4),
+                n,
+              ]
+                .filter((v, i, a) => v > 0 && v <= n && a.indexOf(v) === i)
+                .sort((a, b) => a - b);
+
+        const tbody = document.getElementById("table-body");
+        tbody.innerHTML = "";
+        checkpoints.forEach((y) => {
+          const s = snaps[y - 1];
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            "<td>An " +
+            y +
+            "</td>" +
+            '<td class="deposit-col">' +
+            fmt(s.invested) +
+            "</td>" +
+            '<td class="interest-col">' +
+            fmt(s.interest) +
+            "</td>" +
+            '<td class="total-col">' +
+            fmt(s.total) +
+            "</td>";
+          tbody.appendChild(tr);
+        });
+      }
+
+      /* ---- Events ---- */
+      ["principal", "rate", "years", "deposit"].forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", computeAndRender);
+      });
+
+      document.querySelectorAll(".currency-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document
+            .querySelectorAll(".currency-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCurrency = btn.dataset.currency;
+          computeAndRender();
+        });
+      });
+
+      document.querySelectorAll("[data-freq]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document
+            .querySelectorAll("[data-freq]")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentFreq = parseInt(btn.dataset.freq);
+
+          const panel = document.getElementById("deposit-panel");
+          panel.classList.toggle("visible", currentFreq > 0);
+
+          if (currentFreq > 0) {
+            const labelMap = {
+              12: "Montant mensuel",
+              4: "Montant trimestriel",
+              1: "Montant annuel",
+            };
+            document.getElementById("deposit-label").textContent =
+              labelMap[currentFreq] || "Montant";
+            const sl = document.getElementById("deposit");
+            if (currentFreq === 1) {
+              sl.max = "20000";
+              sl.step = "100";
+              if (parseInt(sl.value) < 100) sl.value = "500";
+            } else if (currentFreq === 4) {
+              sl.max = "10000";
+              sl.step = "50";
+            } else {
+              sl.max = "5000";
+              sl.step = "10";
+            }
+          }
+          computeAndRender();
+        });
+      });
+
+      document.querySelectorAll("[data-timing]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document
+            .querySelectorAll("[data-timing]")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentTiming = btn.dataset.timing;
+          computeAndRender();
+        });
+      });
+
+      computeAndRender();
+    </script>
+  </body>
+</html>
