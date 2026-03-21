@@ -32,7 +32,7 @@ Aucune installation requise. Télécharge le fichier et ouvre-le dans n'importe 
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/ton-pseudo/calculateur-interets.git
+git clone https://github.com/primo25ai/int-composes-cap-variable-blk.git
 
 # Ouvrir directement
 open index.html
@@ -44,7 +44,7 @@ open index.html
 1. Fork ou crée un dépôt contenant `index.html`
 2. Va dans **Settings → Pages**
 3. Source : `Deploy from a branch` → branche `main` → dossier `/`
-4. Ton URL sera : `https://ton-pseudo.github.io/nom-du-depot`
+4. Ton URL sera : `https://primo25ai.github.io/int-composes-cap-variable-blk`
 
 ---
 
