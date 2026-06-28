@@ -1,0 +1,9 @@
+# Document d'audit conservé hors versionnement
+AUDIT_SECURITE.md
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
