@@ -2,13 +2,36 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <!--
+      Content-Security-Policy (pragmatique). Le script inline est autorisé par son
+      hash SHA-256 : si vous modifiez le bloc <script>, recalculez-le via
+      `openssl dgst -sha256 -binary | openssl base64 -A` sinon il sera bloqué.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none';
+               script-src 'self' https://cdnjs.cloudflare.com 'sha256-hV3cp8VdMfY8IARkYC7LX0HcVyowFVke65cKi8MpcT8=';
+               style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+               font-src https://fonts.gstatic.com;
+               img-src 'self' data:;
+               connect-src 'none';
+               base-uri 'none';
+               form-action 'none';
+               object-src 'none'"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>Intérêts Composés</title>
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+      integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <style>
       *,
       *::before,
@@ -466,6 +489,12 @@
   </head>
   <body>
     <div class="wrapper">
+      <noscript>
+        <p style="padding: 1rem; background: var(--accent-light); border-radius: var(--radius); margin-bottom: 1.5rem;">
+          Ce calculateur nécessite JavaScript pour fonctionner. Veuillez
+          l'activer dans votre navigateur.
+        </p>
+      </noscript>
       <header>
         <p class="eyebrow">Calculateur financier</p>
         <h1>Intérêts <em>composés</em></h1>
@@ -504,12 +533,13 @@
 
             <div class="field">
               <div class="field-header">
-                <label class="field-label">Capital initial</label>
+                <label class="field-label" for="principal">Capital initial</label>
                 <span class="field-value" id="v-principal">1 000 €</span>
               </div>
               <input
                 type="range"
                 id="principal"
+                aria-label="Capital initial"
                 min="0"
                 max="100000"
                 step="100"
@@ -519,27 +549,29 @@
 
             <div class="field">
               <div class="field-header">
-                <label class="field-label">Taux annuel</label>
+                <label class="field-label" for="rate">Taux annuel</label>
                 <span class="field-value" id="v-rate">7 %</span>
               </div>
               <input
                 type="range"
                 id="rate"
-                min="1"
+                aria-label="Taux annuel"
+                min="0.5"
                 max="25"
-                step="1"
+                step="0.25"
                 value="7"
               />
             </div>
 
             <div class="field">
               <div class="field-header">
-                <label class="field-label">Durée</label>
+                <label class="field-label" for="years">Durée</label>
                 <span class="field-value" id="v-years">20 ans</span>
               </div>
               <input
                 type="range"
                 id="years"
+                aria-label="Durée en années"
                 min="1"
                 max="50"
                 step="1"
@@ -551,14 +583,26 @@
               <div class="field-header">
                 <label class="field-label">Devise</label>
               </div>
-              <div class="currency-selector">
-                <button class="currency-btn active" data-currency="EUR">
+              <div class="currency-selector" role="group" aria-label="Devise">
+                <button
+                  class="currency-btn active"
+                  data-currency="EUR"
+                  aria-pressed="true"
+                >
                   € Euro
                 </button>
-                <button class="currency-btn" data-currency="USD">
+                <button
+                  class="currency-btn"
+                  data-currency="USD"
+                  aria-pressed="false"
+                >
                   $ Dollar
                 </button>
-                <button class="currency-btn" data-currency="XPF">
+                <button
+                  class="currency-btn"
+                  data-currency="XPF"
+                  aria-pressed="false"
+                >
                   XPF Pacifique
                 </button>
               </div>
@@ -575,18 +619,18 @@
               <div class="field-header">
                 <label class="field-label">Fréquence</label>
               </div>
-              <div class="toggle-group">
-                <button class="toggle-btn active" data-freq="0">Aucun</button>
-                <button class="toggle-btn" data-freq="12">Mensuel</button>
-                <button class="toggle-btn" data-freq="4">Trimestriel</button>
-                <button class="toggle-btn" data-freq="1">Annuel</button>
+              <div class="toggle-group" role="group" aria-label="Fréquence des versements">
+                <button class="toggle-btn active" data-freq="0" aria-pressed="true">Aucun</button>
+                <button class="toggle-btn" data-freq="12" aria-pressed="false">Mensuel</button>
+                <button class="toggle-btn" data-freq="4" aria-pressed="false">Trimestriel</button>
+                <button class="toggle-btn" data-freq="1" aria-pressed="false">Annuel</button>
               </div>
             </div>
 
             <div class="deposit-panel" id="deposit-panel">
               <div class="field">
                 <div class="field-header">
-                  <label class="field-label" id="deposit-label"
+                  <label class="field-label" id="deposit-label" for="deposit"
                     >Montant mensuel</label
                   >
                   <span class="field-value" id="v-deposit">100 €</span>
@@ -594,6 +638,7 @@
                 <input
                   type="range"
                   id="deposit"
+                  aria-label="Montant du versement"
                   min="0"
                   max="5000"
                   step="10"
@@ -605,11 +650,19 @@
                 <div class="field-header">
                   <label class="field-label">Moment du versement</label>
                 </div>
-                <div class="toggle-group">
-                  <button class="toggle-btn active" data-timing="end">
+                <div class="toggle-group" role="group" aria-label="Moment du versement">
+                  <button
+                    class="toggle-btn active"
+                    data-timing="end"
+                    aria-pressed="true"
+                  >
                     Fin de période
                   </button>
-                  <button class="toggle-btn" data-timing="start">
+                  <button
+                    class="toggle-btn"
+                    data-timing="start"
+                    aria-pressed="false"
+                  >
                     Début de période
                   </button>
                 </div>
@@ -703,6 +756,14 @@
           : num + "\u202f" + c.symbol;
       }
 
+      function fmtRate(r) {
+        // r is a fraction (e.g. 0.075) → "7,5 %" without trailing zeros
+        return (
+          (r * 100)
+            .toLocaleString("fr-FR", { maximumFractionDigits: 2 }) + " %"
+        );
+      }
+
       function fmtShort(v) {
         const c = CURRENCIES[currentCurrency];
         const pre = c.position === "before" ? c.symbol : "";
@@ -743,7 +804,7 @@
 
       function computeAndRender() {
         const P = parseInt(document.getElementById("principal").value);
-        const r = parseInt(document.getElementById("rate").value) / 100;
+        const r = parseFloat(document.getElementById("rate").value) / 100;
         const n = parseInt(document.getElementById("years").value);
         const deposit =
           currentFreq > 0
@@ -751,8 +812,7 @@
             : 0;
 
         document.getElementById("v-principal").textContent = fmt(P);
-        document.getElementById("v-rate").textContent =
-          (r * 100).toFixed(0) + " %";
+        document.getElementById("v-rate").textContent = fmtRate(r);
         document.getElementById("v-years").textContent =
           n + " an" + (n > 1 ? "s" : "");
         if (currentFreq > 0)
@@ -773,8 +833,9 @@
         document.getElementById("m-gains").textContent =
           "+" + fmt(last.interest);
         document.getElementById("m-mult").textContent =
-          "\u00d7" +
-          (last.invested > 0 ? (last.total / last.invested).toFixed(2) : "—");
+          last.invested > 0
+            ? "\u00d7" + (last.total / last.invested).toFixed(2)
+            : "—";
 
         // Formula
         if (currentFreq === 0) {
@@ -785,8 +846,8 @@
           document.getElementById("formula-vals").textContent =
             fmt(P) +
             " \u00d7 (1 + " +
-            (r * 100).toFixed(0) +
-            "%)^" +
+            fmtRate(r) +
+            ")^" +
             n +
             " = " +
             fmt(last.total);
@@ -886,9 +947,13 @@
           "Total\u00a0: " +
           fmt(Math.round(items.reduce((s, i) => s + i.parsed.y, 0)));
 
+        // Reuse the existing chart for smooth slider drags; rebuild only on first run.
         if (chart) {
-          chart.destroy();
-          chart = null;
+          chart.data.labels = labels;
+          chart.data.datasets = datasets;
+          chart.update();
+          renderTable(snaps, n);
+          return;
         }
 
         chart = new Chart(document.getElementById("chart"), {
@@ -937,7 +1002,10 @@
           },
         });
 
-        // Table
+        renderTable(snaps, n);
+      }
+
+      function renderTable(snaps, n) {
         const checkpoints =
           n <= 10
             ? Array.from({ length: n }, (_, i) => i + 1)
@@ -955,23 +1023,22 @@
                 .sort((a, b) => a - b);
 
         const tbody = document.getElementById("table-body");
-        tbody.innerHTML = "";
+        tbody.replaceChildren();
+        const cell = (text, cls) => {
+          const td = document.createElement("td");
+          td.textContent = text;
+          if (cls) td.className = cls;
+          return td;
+        };
         checkpoints.forEach((y) => {
           const s = snaps[y - 1];
           const tr = document.createElement("tr");
-          tr.innerHTML =
-            "<td>An " +
-            y +
-            "</td>" +
-            '<td class="deposit-col">' +
-            fmt(s.invested) +
-            "</td>" +
-            '<td class="interest-col">' +
-            fmt(s.interest) +
-            "</td>" +
-            '<td class="total-col">' +
-            fmt(s.total) +
-            "</td>";
+          tr.append(
+            cell("An " + y),
+            cell(fmt(s.invested), "deposit-col"),
+            cell(fmt(s.interest), "interest-col"),
+            cell(fmt(s.total), "total-col"),
+          );
           tbody.appendChild(tr);
         });
       }
@@ -982,12 +1049,17 @@
         if (el) el.addEventListener("input", computeAndRender);
       });
 
+      function setActive(group, btn) {
+        group.forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle("active", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
       document.querySelectorAll(".currency-btn").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document
-            .querySelectorAll(".currency-btn")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
+          setActive(document.querySelectorAll(".currency-btn"), btn);
           currentCurrency = btn.dataset.currency;
           computeAndRender();
         });
@@ -995,10 +1067,7 @@
 
       document.querySelectorAll("[data-freq]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document
-            .querySelectorAll("[data-freq]")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
+          setActive(document.querySelectorAll("[data-freq]"), btn);
           currentFreq = parseInt(btn.dataset.freq);
 
           const panel = document.getElementById("deposit-panel");
@@ -1031,10 +1100,7 @@
 
       document.querySelectorAll("[data-timing]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          document
-            .querySelectorAll("[data-timing]")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
+          setActive(document.querySelectorAll("[data-timing]"), btn);
           currentTiming = btn.dataset.timing;
           computeAndRender();
         });

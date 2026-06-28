@@ -6,7 +6,7 @@ Un outil interactif pour visualiser la puissance des intérêts composés, avec 
 
 ## Aperçu
 
-![Thème Océan Bleu · Style Finance](https://img.shields.io/badge/Thème-Océan%20Bleu-0057B8?style=flat-square) ![Statique](https://img.shields.io/badge/Type-HTML%20statique-00A878?style=flat-square) ![Licence](https://img.shields.io/badge/Licence-MIT-gray?style=flat-square)
+![Thème Vert Forêt · Style Finance](https://img.shields.io/badge/Thème-Vert%20Forêt-1a4d3e?style=flat-square) ![Statique](https://img.shields.io/badge/Type-HTML%20statique-00A878?style=flat-square) ![Licence](https://img.shields.io/badge/Licence-MIT-gray?style=flat-square)
 
 ---
 
@@ -50,14 +50,14 @@ open index.html
 
 ## Paramètres disponibles
 
-| Paramètre             | Plage       | Description                     |
-| --------------------- | ----------- | ------------------------------- |
-| Capital initial       | 0 – 100 000 | Montant placé au départ         |
-| Taux annuel           | 1 % – 25 %  | Taux d'intérêt annuel brut      |
-| Durée                 | 1 – 50 ans  | Horizon de placement            |
-| Versement mensuel     | 0 – 5 000   | Montant ajouté chaque mois      |
-| Versement trimestriel | 0 – 10 000  | Montant ajouté chaque trimestre |
-| Versement annuel      | 0 – 20 000  | Montant ajouté chaque année     |
+| Paramètre             | Plage        | Description                                 |
+| --------------------- | ------------ | ------------------------------------------- |
+| Capital initial       | 0 – 100 000  | Montant placé au départ                     |
+| Taux annuel           | 0,5 % – 25 % | Taux d'intérêt annuel brut (pas de 0,25 %)  |
+| Durée                 | 1 – 50 ans   | Horizon de placement                        |
+| Versement mensuel     | 0 – 5 000    | Montant ajouté chaque mois                  |
+| Versement trimestriel | 0 – 10 000   | Montant ajouté chaque trimestre             |
+| Versement annuel      | 0 – 20 000   | Montant ajouté chaque année                 |
 
 ---
 
@@ -83,7 +83,7 @@ Où `P` = capital initial · `r` = taux annuel · `n` = années · `m` = périod
 
 - **HTML5 / CSS3 / JavaScript** — vanilla, zéro framework
 - **Chart.js 4.4** — graphiques en barres empilées
-- **Google Fonts** — Space Grotesk, Inter, JetBrains Mono
+- **Google Fonts** — DM Serif Display, Instrument Sans, DM Mono
 - Fonctionne hors ligne après le premier chargement des polices
 
 ---
@@ -94,6 +94,27 @@ Où `P` = capital initial · `r` = taux annuel · `n` = années · `m` = périod
 /
 ├── index.html     # Application complète (fichier unique)
 └── README.md      # Ce fichier
+```
+
+---
+
+## Sécurité
+
+Application 100 % statique côté client : aucune donnée collectée, aucun backend, aucune persistance.
+
+- **SRI** — Chart.js est chargé depuis le CDN avec un hash `integrity` (Subresource Integrity) : toute altération du fichier distant est rejetée par le navigateur.
+- **Content-Security-Policy** — une CSP est appliquée via balise `<meta>` : scripts limités à l'origine + cdnjs, le script inline étant autorisé par son hash SHA-256. Toute modification du bloc `<script>` impose de recalculer ce hash (`openssl dgst -sha256 -binary | openssl base64 -A`), sinon le navigateur le bloque.
+- **Pas d'entrée texte utilisateur** — toutes les valeurs proviennent de curseurs/boutons numériques ; aucun puits dangereux (`eval`, `innerHTML` avec données externes, etc.).
+
+### En-têtes recommandés au déploiement
+
+`frame-ancestors` et `X-Content-Type-Options` ne sont pas applicables via `<meta>`. Si vous déployez derrière un serveur configurable (note : GitHub Pages ne permet pas d'en-têtes personnalisés), ajoutez :
+
+```text
+X-Content-Type-Options: nosniff
+Content-Security-Policy: frame-ancestors 'none'   # anti-clickjacking
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=31536000; includeSubDomains
 ```
 
 ---

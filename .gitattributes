@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Force LF for index.html: its inline-script CSP hash is computed over the raw
+# bytes, so a CRLF checkout would break Content-Security-Policy validation.
+index.html text eol=lf
