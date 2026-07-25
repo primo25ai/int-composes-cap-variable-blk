@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <!--
-      Content-Security-Policy (pragmatique). Le script inline est autorisé par son
-      hash SHA-256 : si vous modifiez le bloc <script>, recalculez-le via
+      Content-Security-Policy (pragmatique). Les scripts inline sont autorisés par
+      leur hash SHA-256 : si vous modifiez un bloc <script>, recalculez son hash via
       `openssl dgst -sha256 -binary | openssl base64 -A` sinon il sera bloqué.
     -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'none';
-               script-src 'self' https://cdnjs.cloudflare.com 'sha256-hV3cp8VdMfY8IARkYC7LX0HcVyowFVke65cKi8MpcT8=';
+               script-src 'self' https://cdnjs.cloudflare.com 'sha256-faOxF3B2QKwzbYZVmeMgLuHPdQlkfj3LNJRuZcJZlY8=' 'sha256-7jG69Bcap0ksS7SHKjZ4c0H4a/NqtN78vZANwer8RYU=';
                style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
                font-src https://fonts.gstatic.com;
                img-src 'self' data:;
@@ -28,7 +28,7 @@
       href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFhNGQzZSIvPjxyZWN0IHg9IjciIHk9IjE4IiB3aWR0aD0iNCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iI2Q2ZWFlNCIvPjxyZWN0IHg9IjE0IiB5PSIxMyIgd2lkdGg9IjQiIGhlaWdodD0iMTMiIHJ4PSIxIiBmaWxsPSIjNGNhZjg1Ii8+PHJlY3QgeD0iMjEiIHk9IjciIHdpZHRoPSI0IiBoZWlnaHQ9IjE5IiByeD0iMSIgZmlsbD0iI2Y1ZjJlYyIvPjwvc3ZnPgo="
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <script
@@ -47,39 +47,81 @@
       }
 
       :root {
-        --bg: #f5f2ec;
+        --bg: #edeff3;
         --surface: #ffffff;
-        --surface2: #ede9e1;
-        --ink: #1a1814;
-        --ink2: #6b6760;
-        --ink3: #a8a49e;
-        --accent: #1a4d3e;
-        --accent-light: #d6eae4;
-        --accent2: #c4622d;
-        --accent3: #185fa5;
-        --border: rgba(26, 24, 20, 0.1);
-        --font-display: "DM Serif Display", Georgia, serif;
-        --font-body: "Instrument Sans", sans-serif;
-        --font-mono: "DM Mono", monospace;
+        --surface2: #e1e5eb;
+        --ink: #10192b;
+        --ink2: #4b5768;
+        --ink3: #8b94a3;
+        --accent: #8a6720;
+        --accent-light: #f4e9d2;
+        --gain: #1f7a52;
+        --gain-light: #dceee4;
+        --principal: #b94e24;
+        --deposit: #1d63a8;
+        --border: rgba(16, 25, 43, 0.1);
+        --font-display: "Space Grotesk", ui-sans-serif, sans-serif;
+        --font-body: "Inter", ui-sans-serif, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
         --radius: 12px;
-        --shadow: 0 2px 12px rgba(26, 24, 20, 0.07);
+        --shadow: 0 2px 12px rgba(16, 25, 43, 0.07);
+        --shadow-hover: 0 10px 28px rgba(16, 25, 43, 0.1);
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #151310;
-          --surface: #1f1d19;
-          --surface2: #2a2722;
-          --ink: #f0ede6;
-          --ink2: #9a9790;
-          --ink3: #5a5752;
-          --accent: #4caf85;
-          --accent-light: #0f2e23;
-          --accent2: #e07b4a;
-          --accent3: #5b9bd5;
-          --border: rgba(240, 237, 230, 0.08);
-          --shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+          --bg: #0a0f1c;
+          --surface: #121826;
+          --surface2: #1b2334;
+          --ink: #edeff4;
+          --ink2: #9aa4b6;
+          --ink3: #576174;
+          --accent: #e3b458;
+          --accent-light: #2a2313;
+          --gain: #4ade94;
+          --gain-light: #123024;
+          --principal: #f2966b;
+          --deposit: #6fa8e0;
+          --border: rgba(237, 239, 244, 0.08);
+          --shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+          --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
         }
+      }
+
+      :root[data-theme="dark"] {
+        --bg: #0a0f1c;
+        --surface: #121826;
+        --surface2: #1b2334;
+        --ink: #edeff4;
+        --ink2: #9aa4b6;
+        --ink3: #576174;
+        --accent: #e3b458;
+        --accent-light: #2a2313;
+        --gain: #4ade94;
+        --gain-light: #123024;
+        --principal: #f2966b;
+        --deposit: #6fa8e0;
+        --border: rgba(237, 239, 244, 0.08);
+        --shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+        --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.5);
+      }
+
+      :root[data-theme="light"] {
+        --bg: #edeff3;
+        --surface: #ffffff;
+        --surface2: #e1e5eb;
+        --ink: #10192b;
+        --ink2: #4b5768;
+        --ink3: #8b94a3;
+        --accent: #8a6720;
+        --accent-light: #f4e9d2;
+        --gain: #1f7a52;
+        --gain-light: #dceee4;
+        --principal: #b94e24;
+        --deposit: #1d63a8;
+        --border: rgba(16, 25, 43, 0.1);
+        --shadow: 0 2px 12px rgba(16, 25, 43, 0.07);
+        --shadow-hover: 0 10px 28px rgba(16, 25, 43, 0.1);
       }
 
       html {
@@ -93,6 +135,7 @@
         font-family: var(--font-body);
         min-height: 100vh;
         padding: 2rem 1rem 4rem;
+        transition: background 0.25s ease, color 0.25s ease;
       }
 
       .wrapper {
@@ -100,10 +143,22 @@
         margin: 0 auto;
       }
 
-      header {
+      .site-header {
+        position: relative;
         margin-bottom: 2.5rem;
         padding-bottom: 2rem;
         border-bottom: 1px solid var(--border);
+        overflow: hidden;
+      }
+
+      .header-top {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.85rem;
       }
 
       .eyebrow {
@@ -112,28 +167,125 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--accent);
-        margin-bottom: 0.75rem;
+      }
+
+      .theme-toggle {
+        position: relative;
+        flex-shrink: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--ink2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.2s ease,
+          color 0.2s ease, background 0.2s ease;
+      }
+      .theme-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: scale(1.06);
+      }
+      .theme-toggle:active {
+        transform: scale(0.9);
+      }
+      .theme-toggle .icon-wrap {
+        position: relative;
+        width: 18px;
+        height: 18px;
+      }
+      .theme-toggle svg {
+        position: absolute;
+        inset: 0;
+        width: 18px;
+        height: 18px;
+        transition: opacity 0.25s ease, transform 0.35s ease;
+      }
+      .icon-sun {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      }
+      .icon-moon {
+        opacity: 0;
+        transform: rotate(-60deg) scale(0.6);
+      }
+      :root[data-theme="dark"] .icon-sun {
+        opacity: 0;
+        transform: rotate(60deg) scale(0.6);
+      }
+      :root[data-theme="dark"] .icon-moon {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
       }
 
       h1 {
+        position: relative;
+        z-index: 1;
         font-family: var(--font-display);
-        font-size: clamp(2rem, 6vw, 3.2rem);
-        font-weight: 400;
+        font-size: clamp(2rem, 5.5vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
         line-height: 1.1;
         color: var(--ink);
         margin-bottom: 0.75rem;
       }
 
       h1 em {
-        font-style: italic;
+        font-style: normal;
         color: var(--accent);
+        text-decoration: underline;
+        text-decoration-color: var(--accent);
+        text-decoration-thickness: 3px;
+        text-underline-offset: 8px;
       }
 
       .subtitle {
+        position: relative;
+        z-index: 1;
         font-size: 15px;
         color: var(--ink2);
         line-height: 1.6;
-        max-width: 520px;
+        max-width: 500px;
+      }
+
+      .growth-curve {
+        position: absolute;
+        z-index: 0;
+        right: -8px;
+        top: 4px;
+        width: 44%;
+        max-width: 320px;
+        height: auto;
+        pointer-events: none;
+      }
+      .curve-flat {
+        stroke: var(--ink3);
+        stroke-width: 1.5;
+        stroke-dasharray: 4 5;
+        opacity: 0.55;
+        fill: none;
+      }
+      .curve-path {
+        stroke: var(--accent);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        fill: none;
+        stroke-dasharray: 460;
+        stroke-dashoffset: 0;
+      }
+      .curve-dot {
+        fill: var(--accent);
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+      @media (max-width: 640px) {
+        .growth-curve {
+          display: none;
+        }
       }
 
       .layout {
@@ -153,6 +305,13 @@
         border-radius: var(--radius);
         border: 1px solid var(--border);
         box-shadow: var(--shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          border-color 0.2s ease, background 0.25s ease;
+      }
+
+      .panel:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
       }
 
       .panel-body {
@@ -194,6 +353,7 @@
       .metric {
         background: var(--surface);
         padding: 1.25rem;
+        transition: background 0.25s ease;
       }
 
       .metric-label {
@@ -207,20 +367,22 @@
 
       .metric-value {
         font-family: var(--font-display);
-        font-size: clamp(1rem, 2.4vw, 1.65rem);
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+        font-size: clamp(1.05rem, 2.5vw, 1.75rem);
         color: var(--ink);
         line-height: 1;
         word-break: break-all;
       }
 
       .metric-value.positive {
-        color: var(--accent);
+        color: var(--gain);
       }
       .metric-value.highlight {
-        color: var(--accent2);
+        color: var(--principal);
       }
       .metric-value.blue {
-        color: var(--accent3);
+        color: var(--deposit);
       }
 
       .field {
@@ -247,6 +409,7 @@
         font-size: 13px;
         font-weight: 500;
         color: var(--ink);
+        font-variant-numeric: tabular-nums;
       }
 
       input[type="range"] {
@@ -288,6 +451,7 @@
       }
 
       .toggle-group {
+        position: relative;
         display: flex;
         background: var(--surface2);
         border-radius: 8px;
@@ -295,7 +459,22 @@
         gap: 3px;
       }
 
+      .toggle-pill {
+        position: absolute;
+        top: 3px;
+        bottom: 3px;
+        left: 0;
+        background: var(--surface);
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+          width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 0;
+      }
+
       .toggle-btn {
+        position: relative;
+        z-index: 1;
         flex: 1;
         font-family: var(--font-mono);
         font-size: 11px;
@@ -306,16 +485,17 @@
         background: transparent;
         color: var(--ink2);
         cursor: pointer;
-        transition: all 0.15s;
+        transition: color 0.2s ease, transform 0.15s ease;
         text-align: center;
         white-space: nowrap;
       }
+      .toggle-btn:active {
+        transform: scale(0.96);
+      }
 
       .toggle-btn.active {
-        background: var(--surface);
         color: var(--accent);
-        font-weight: 500;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        font-weight: 600;
       }
 
       .deposit-panel {
@@ -323,7 +503,7 @@
         padding: 1rem;
         background: var(--accent-light);
         border-radius: 8px;
-        border: 1px solid rgba(26, 77, 62, 0.12);
+        border: 1px solid var(--border);
         display: none;
       }
 
@@ -359,6 +539,10 @@
       .currency-btn:hover {
         border-color: var(--accent);
         color: var(--accent);
+        transform: translateY(-1px);
+      }
+      .currency-btn:active {
+        transform: scale(0.96);
       }
 
       .currency-btn.active {
@@ -460,6 +644,7 @@
         padding: 0.6rem 0.75rem;
         border-bottom: 1px solid var(--border);
         color: var(--ink2);
+        font-variant-numeric: tabular-nums;
       }
 
       .compare-table tr:last-child td {
@@ -470,15 +655,15 @@
         font-weight: 500;
       }
       .deposit-col {
-        color: var(--accent3) !important;
+        color: var(--deposit) !important;
         font-family: var(--font-mono);
       }
       .interest-col {
-        color: var(--accent) !important;
+        color: var(--gain) !important;
         font-family: var(--font-mono);
       }
       .total-col {
-        color: var(--accent2) !important;
+        color: var(--principal) !important;
         font-family: var(--font-mono);
         font-weight: 500 !important;
       }
@@ -490,6 +675,82 @@
         color: var(--ink3);
         font-family: var(--font-mono);
       }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .site-header {
+          animation: fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+        .layout > * {
+          animation: fade-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+        .layout > *:nth-child(1) {
+          animation-delay: 0.08s;
+        }
+        .layout > *:nth-child(2) {
+          animation-delay: 0.16s;
+        }
+        .layout > *:nth-child(3) {
+          animation-delay: 0.22s;
+        }
+        .layout > *:nth-child(4) {
+          animation-delay: 0.28s;
+        }
+        .layout > *:nth-child(5) {
+          animation-delay: 0.34s;
+        }
+        .layout > *:nth-child(6) {
+          animation-delay: 0.4s;
+        }
+        @keyframes fade-up {
+          from {
+            opacity: 0;
+            transform: translateY(14px);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+
+        .curve-path {
+          stroke-dashoffset: 460;
+          animation: draw-curve 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s
+            forwards;
+        }
+        @keyframes draw-curve {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+        .curve-dot {
+          animation: pop-dot 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s
+            backwards;
+        }
+        @keyframes pop-dot {
+          from {
+            opacity: 0;
+            transform: scale(0);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        .metric-value.rolling {
+          animation: roll-in 0.25s ease;
+        }
+        @keyframes roll-in {
+          from {
+            opacity: 0.35;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+      }
     </style>
   </head>
   <body>
@@ -500,14 +761,61 @@
           l'activer dans votre navigateur.
         </p>
       </noscript>
-      <header>
-        <p class="eyebrow">Calculateur financier</p>
+      <header class="site-header">
+        <div class="header-top">
+          <p class="eyebrow">Calculateur financier</p>
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-label="Activer le thème sombre"
+          >
+            <span class="icon-wrap">
+              <svg
+                class="icon-sun"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="4" />
+                <path
+                  d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+                />
+              </svg>
+              <svg
+                class="icon-moon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
+              </svg>
+            </span>
+          </button>
+        </div>
         <h1>Intérêts <em>composés</em></h1>
         <p class="subtitle">
           Visualisez la puissance de la croissance exponentielle — avec ou sans
           versements réguliers. Les intérêts génèrent des intérêts, et le temps
           fait le reste.
         </p>
+        <svg
+          class="growth-curve"
+          viewBox="0 0 400 140"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path class="curve-flat" d="M20,118 L380,64" />
+          <path class="curve-path" d="M20,118 C140,108 260,78 380,14" />
+          <circle class="curve-dot" cx="380" cy="14" r="4" />
+        </svg>
       </header>
 
       <div class="layout">
@@ -698,15 +1006,15 @@
             <p class="panel-title">Évolution dans le temps</p>
             <div class="legend">
               <div class="legend-item">
-                <div class="legend-dot" style="background: #c4622d"></div>
+                <div class="legend-dot" style="background: var(--principal)"></div>
                 Capital initial
               </div>
               <div class="legend-item" id="leg-deposit" style="display: none">
-                <div class="legend-dot" style="background: #185fa5"></div>
+                <div class="legend-dot" style="background: var(--deposit)"></div>
                 Versements cumulés
               </div>
               <div class="legend-item">
-                <div class="legend-dot" style="background: #1a4d3e"></div>
+                <div class="legend-dot" style="background: var(--gain)"></div>
                 Intérêts
               </div>
             </div>
@@ -741,6 +1049,19 @@
     </div>
 
     <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var theme = saved
+            ? saved
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
+    <script>
       let chart = null;
 
       const CURRENCIES = {
@@ -753,12 +1074,18 @@
       let currentFreq = 0;
       let currentTiming = "end";
 
+      function getTheme() {
+        return document.documentElement.getAttribute("data-theme") === "dark"
+          ? "dark"
+          : "light";
+      }
+
       function fmt(n) {
         const c = CURRENCIES[currentCurrency];
         const num = Math.round(n).toLocaleString(c.locale);
         return c.position === "before"
           ? c.symbol + num
-          : num + "\u202f" + c.symbol;
+          : num + " " + c.symbol;
       }
 
       function fmtRate(r) {
@@ -772,10 +1099,19 @@
       function fmtShort(v) {
         const c = CURRENCIES[currentCurrency];
         const pre = c.position === "before" ? c.symbol : "";
-        const post = c.position === "after" ? "\u202f" + c.symbol : "";
+        const post = c.position === "after" ? " " + c.symbol : "";
         if (v >= 1000000) return pre + (v / 1000000).toFixed(1) + "M" + post;
         if (v >= 1000) return pre + Math.round(v / 1000) + "k" + post;
         return pre + Math.round(v) + post;
+      }
+
+      function setMetric(id, text) {
+        const el = document.getElementById(id);
+        if (el.textContent === text) return;
+        el.textContent = text;
+        el.classList.remove("rolling");
+        void el.offsetWidth;
+        el.classList.add("rolling");
       }
 
       function calcSnapshots(P, r, n, deposit, freq, timing) {
@@ -833,24 +1169,25 @@
         );
         const last = snaps[snaps.length - 1];
 
-        document.getElementById("m-final").textContent = fmt(last.total);
-        document.getElementById("m-invested").textContent = fmt(last.invested);
-        document.getElementById("m-gains").textContent =
-          "+" + fmt(last.interest);
-        document.getElementById("m-mult").textContent =
+        setMetric("m-final", fmt(last.total));
+        setMetric("m-invested", fmt(last.invested));
+        setMetric("m-gains", "+" + fmt(last.interest));
+        setMetric(
+          "m-mult",
           last.invested > 0
-            ? "\u00d7" + (last.total / last.invested).toFixed(2)
-            : "—";
+            ? "×" + (last.total / last.invested).toFixed(2)
+            : "—",
+        );
 
         // Formula
         if (currentFreq === 0) {
           document.getElementById("formula-eq").textContent =
-            "A = P \u00d7 (1 + r)\u207f";
+            "A = P × (1 + r)ⁿ";
           document.getElementById("formula-desc").textContent =
-            "P = capital initial \u00b7 r = taux annuel \u00b7 n = ann\u00e9es";
+            "P = capital initial · r = taux annuel · n = années";
           document.getElementById("formula-vals").textContent =
             fmt(P) +
-            " \u00d7 (1 + " +
+            " × (1 + " +
             fmtRate(r) +
             ")^" +
             n +
@@ -859,19 +1196,19 @@
         } else {
           const fl = { 12: "mois", 4: "trimestres", 1: "ans" }[currentFreq];
           document.getElementById("formula-eq").textContent =
-            "FV = P\u00d7(1+r/m)^(mn) + d\u00d7[((1+r/m)^(mn)\u22121)\u00f7(r/m)]";
+            "FV = P×(1+r/m)^(mn) + d×[((1+r/m)^(mn)−1)÷(r/m)]";
           document.getElementById("formula-desc").textContent =
-            "P = capital initial \u00b7 d = versement \u00b7 m = p\u00e9riodes/an (" +
+            "P = capital initial · d = versement · m = périodes/an (" +
             currentFreq +
-            ") \u00b7 n = ann\u00e9es";
+            ") · n = années";
           document.getElementById("formula-vals").textContent =
             "Capital: " +
             fmt(P) +
-            " \u00b7 Versement: " +
+            " · Versement: " +
             fmt(deposit) +
             "/" +
             fl +
-            " \u00b7 R\u00e9sultat: " +
+            " · Résultat: " +
             fmt(last.total);
         }
 
@@ -884,13 +1221,11 @@
           currentFreq > 0 ? "Capital versé" : "Capital initial";
 
         // Chart data
-        const isDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
+        const isDark = getTheme() === "dark";
         const gridColor = isDark
           ? "rgba(255,255,255,0.06)"
           : "rgba(0,0,0,0.06)";
-        const tickColor = isDark ? "#5A5752" : "#A8A49E";
+        const tickColor = isDark ? "#57617A" : "#8B94A3";
 
         const step = n > 30 ? 2 : 1;
         const pts = [
@@ -906,7 +1241,7 @@
         ];
 
         const labels = pts.map((s) =>
-          s.year === 0 ? "D\u00e9part" : "An\u00a0" + s.year,
+          s.year === 0 ? "Départ" : "An " + s.year,
         );
         const dPrinc = pts.map((s) => s.principal);
         const dDeposits = pts.map((s) => s.deposited);
@@ -917,8 +1252,8 @@
             label: "Capital initial",
             data: dPrinc,
             backgroundColor: isDark
-              ? "rgba(224,123,74,0.85)"
-              : "rgba(196,98,45,0.85)",
+              ? "rgba(242,150,107,0.85)"
+              : "rgba(185,78,36,0.85)",
             borderColor: "transparent",
             stack: "stack",
           },
@@ -928,8 +1263,8 @@
                   label: "Versements cumulés",
                   data: dDeposits,
                   backgroundColor: isDark
-                    ? "rgba(91,155,213,0.8)"
-                    : "rgba(24,95,165,0.75)",
+                    ? "rgba(111,168,224,0.82)"
+                    : "rgba(29,99,168,0.78)",
                   borderColor: "transparent",
                   stack: "stack",
                 },
@@ -939,17 +1274,17 @@
             label: "Intérêts",
             data: dInterest,
             backgroundColor: isDark
-              ? "rgba(76,175,133,0.85)"
-              : "rgba(26,77,62,0.85)",
+              ? "rgba(74,222,148,0.85)"
+              : "rgba(31,122,82,0.85)",
             borderColor: "transparent",
             stack: "stack",
           },
         ];
 
         const tooltipLabel = (ctx) =>
-          " " + ctx.dataset.label + "\u00a0: " + fmt(Math.round(ctx.parsed.y));
+          " " + ctx.dataset.label + " : " + fmt(Math.round(ctx.parsed.y));
         const tooltipFooter = (items) =>
-          "Total\u00a0: " +
+          "Total : " +
           fmt(Math.round(items.reduce((s, i) => s + i.parsed.y, 0)));
 
         // Reuse the existing chart for smooth slider drags; rebuild only on first run.
@@ -970,14 +1305,14 @@
             plugins: {
               legend: { display: false },
               tooltip: {
-                backgroundColor: isDark ? "#1F1D19" : "#fff",
+                backgroundColor: isDark ? "#121826" : "#fff",
                 borderColor: isDark
                   ? "rgba(255,255,255,0.08)"
                   : "rgba(0,0,0,0.1)",
                 borderWidth: 1,
-                titleColor: isDark ? "#F0EDE6" : "#1A1814",
-                bodyColor: isDark ? "#9A9790" : "#6B6760",
-                footerColor: isDark ? "#F0EDE6" : "#1A1814",
+                titleColor: isDark ? "#EDEFF4" : "#10192B",
+                bodyColor: isDark ? "#9AA4B6" : "#4B5768",
+                footerColor: isDark ? "#EDEFF4" : "#10192B",
                 footerFont: { weight: "500" },
                 padding: 10,
                 callbacks: { label: tooltipLabel, footer: tooltipFooter },
@@ -988,7 +1323,7 @@
                 stacked: true,
                 ticks: {
                   color: tickColor,
-                  font: { size: 11, family: "'DM Mono', monospace" },
+                  font: { size: 11, family: "'JetBrains Mono', monospace" },
                   autoSkip: true,
                   maxTicksLimit: 10,
                 },
@@ -998,7 +1333,7 @@
                 stacked: true,
                 ticks: {
                   color: tickColor,
-                  font: { size: 11, family: "'DM Mono', monospace" },
+                  font: { size: 11, family: "'JetBrains Mono', monospace" },
                   callback: fmtShort,
                 },
                 grid: { color: gridColor },
@@ -1048,6 +1383,26 @@
         });
       }
 
+      function movePill(group, btn) {
+        if (!group) return;
+        const pill = group.querySelector(".toggle-pill");
+        if (!pill || !btn) return;
+        pill.style.width = btn.offsetWidth + "px";
+        pill.style.transform = "translateX(" + btn.offsetLeft + "px)";
+      }
+
+      function initPills() {
+        document.querySelectorAll(".toggle-group").forEach(function (group) {
+          const pill = document.createElement("span");
+          pill.className = "toggle-pill";
+          group.insertBefore(pill, group.firstChild);
+          const active =
+            group.querySelector(".toggle-btn.active") ||
+            group.querySelector(".toggle-btn");
+          movePill(group, active);
+        });
+      }
+
       /* ---- Events ---- */
       ["principal", "rate", "years", "deposit"].forEach(function (id) {
         const el = document.getElementById(id);
@@ -1073,6 +1428,7 @@
       document.querySelectorAll("[data-freq]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           setActive(document.querySelectorAll("[data-freq]"), btn);
+          movePill(btn.closest(".toggle-group"), btn);
           currentFreq = parseInt(btn.dataset.freq);
 
           const panel = document.getElementById("deposit-panel");
@@ -1098,6 +1454,8 @@
               sl.max = "5000";
               sl.step = "10";
             }
+            const timingGroup = panel.querySelector(".toggle-group");
+            movePill(timingGroup, timingGroup.querySelector(".active"));
           }
           computeAndRender();
         });
@@ -1106,11 +1464,41 @@
       document.querySelectorAll("[data-timing]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           setActive(document.querySelectorAll("[data-timing]"), btn);
+          movePill(btn.closest(".toggle-group"), btn);
           currentTiming = btn.dataset.timing;
           computeAndRender();
         });
       });
 
+      const themeToggle = document.getElementById("theme-toggle");
+      function syncToggleLabel() {
+        themeToggle.setAttribute(
+          "aria-label",
+          getTheme() === "dark" ? "Activer le thème clair" : "Activer le thème sombre",
+        );
+      }
+      themeToggle.addEventListener("click", function () {
+        const next = getTheme() === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try {
+          localStorage.setItem("theme", next);
+        } catch (e) {}
+        syncToggleLabel();
+        if (chart) {
+          chart.destroy();
+          chart = null;
+        }
+        computeAndRender();
+      });
+      syncToggleLabel();
+
+      window.addEventListener("resize", function () {
+        document.querySelectorAll(".toggle-group").forEach(function (g) {
+          movePill(g, g.querySelector(".toggle-btn.active"));
+        });
+      });
+
+      initPills();
       computeAndRender();
     </script>
   </body>
