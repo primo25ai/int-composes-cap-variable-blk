@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <!--
-      Content-Security-Policy (pragmatique). Les scripts inline sont autorisés par
-      leur hash SHA-256 : si vous modifiez un bloc <script>, recalculez son hash via
-      `openssl dgst -sha256 -binary | openssl base64 -A` sinon il sera bloqué.
+      Content-Security-Policy (stricte, sans 'unsafe-inline'). Les blocs <script> ET
+      le bloc <style> sont autorisés par leur hash SHA-256 : si vous modifiez l'un
+      d'eux, recalculez son hash sur son contenu exact (entre les balises, LF only) :
+      `openssl dgst -sha256 -binary | openssl base64 -A`
+      sinon il sera bloqué silencieusement par le navigateur.
     -->
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'none';
                script-src 'self' https://cdnjs.cloudflare.com 'sha256-faOxF3B2QKwzbYZVmeMgLuHPdQlkfj3LNJRuZcJZlY8=' 'sha256-7jG69Bcap0ksS7SHKjZ4c0H4a/NqtN78vZANwer8RYU=';
-               style-src 'self' 'unsafe-inline';
+               style-src 'self' 'sha256-/Rf5+lEi/kC8J1D9nKaMNE/eFv/e0ufjhOy9l0gFfh4=';
                font-src 'self';
                img-src 'self' data:;
                connect-src 'none';
@@ -608,6 +610,30 @@
         border-radius: 2px;
         flex-shrink: 0;
       }
+      .legend-dot.dot-principal {
+        background: var(--principal);
+      }
+      .legend-dot.dot-deposit {
+        background: var(--deposit);
+      }
+      .legend-dot.dot-gain {
+        background: var(--gain);
+      }
+
+      #leg-deposit {
+        display: none;
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+      }
+
+      .noscript-msg {
+        padding: 1rem;
+        background: var(--accent-light);
+        border-radius: var(--radius);
+        margin-bottom: 1.5rem;
+      }
 
       .formula-panel {
         grid-column: 1 / -1;
@@ -783,7 +809,7 @@
   <body>
     <div class="wrapper">
       <noscript>
-        <p style="padding: 1rem; background: var(--accent-light); border-radius: var(--radius); margin-bottom: 1.5rem;">
+        <p class="noscript-msg">
           Ce calculateur nécessite JavaScript pour fonctionner. Veuillez
           l'activer dans votre navigateur.
         </p>
@@ -1033,15 +1059,15 @@
             <p class="panel-title">Évolution dans le temps</p>
             <div class="legend">
               <div class="legend-item">
-                <div class="legend-dot" style="background: var(--principal)"></div>
+                <div class="legend-dot dot-principal"></div>
                 Capital initial
               </div>
-              <div class="legend-item" id="leg-deposit" style="display: none">
-                <div class="legend-dot" style="background: var(--deposit)"></div>
+              <div class="legend-item" id="leg-deposit">
+                <div class="legend-dot dot-deposit"></div>
                 Versements cumulés
               </div>
               <div class="legend-item">
-                <div class="legend-dot" style="background: var(--gain)"></div>
+                <div class="legend-dot dot-gain"></div>
                 Intérêts
               </div>
             </div>
@@ -1055,7 +1081,7 @@
         <div class="panel compare-panel">
           <div class="panel-body">
             <p class="panel-title">Détail annuel</p>
-            <div style="overflow-x: auto">
+            <div class="table-scroll">
               <table class="compare-table">
                 <thead id="table-head">
                   <tr>
