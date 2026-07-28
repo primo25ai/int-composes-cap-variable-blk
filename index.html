@@ -11,8 +11,8 @@
       http-equiv="Content-Security-Policy"
       content="default-src 'none';
                script-src 'self' https://cdnjs.cloudflare.com 'sha256-faOxF3B2QKwzbYZVmeMgLuHPdQlkfj3LNJRuZcJZlY8=' 'sha256-7jG69Bcap0ksS7SHKjZ4c0H4a/NqtN78vZANwer8RYU=';
-               style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
-               font-src https://fonts.gstatic.com;
+               style-src 'self' 'unsafe-inline';
+               font-src 'self';
                img-src 'self' data:;
                connect-src 'none';
                base-uri 'none';
@@ -27,10 +27,6 @@
       type="image/svg+xml"
       href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNyIgZmlsbD0iIzFhNGQzZSIvPjxyZWN0IHg9IjciIHk9IjE4IiB3aWR0aD0iNCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iI2Q2ZWFlNCIvPjxyZWN0IHg9IjE0IiB5PSIxMyIgd2lkdGg9IjQiIGhlaWdodD0iMTMiIHJ4PSIxIiBmaWxsPSIjNGNhZjg1Ii8+PHJlY3QgeD0iMjEiIHk9IjciIHdpZHRoPSI0IiBoZWlnaHQ9IjE5IiByeD0iMSIgZmlsbD0iI2Y1ZjJlYyIvPjwvc3ZnPgo="
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
       integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
@@ -38,6 +34,37 @@
       referrerpolicy="no-referrer"
     ></script>
     <style>
+      @font-face {
+        font-family: "Space Grotesk";
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url("fonts/space-grotesk-variable-latin.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+          U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url("fonts/inter-variable-latin.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+          U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        font-style: normal;
+        font-weight: 400 600;
+        font-display: swap;
+        src: url("fonts/jetbrains-mono-variable-latin.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+          U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+
       *,
       *::before,
       *::after {
